@@ -25,8 +25,8 @@ class ModernYTDownloader:
         # Initialize main window
         self.root = ctk.CTk()
         self.root.title("YT Downloader Pro")
-        self.root.geometry("800x600")
-        self.root.minsize(600, 400)
+        self.root.geometry("900x700")
+        self.root.minsize(700, 500)
         
         # Initialize downloader
         self.downloader = VideoDownloader()
@@ -124,65 +124,127 @@ class ModernYTDownloader:
         )
         self.quality_menu.pack(side="left", padx=10, pady=10)
         
-        # Download button
+        # Download button - make it more prominent
+        download_container = ctk.CTkFrame(options_frame)
+        download_container.pack(fill="x", padx=20, pady=20)
+        
         self.download_btn = ctk.CTkButton(
-            options_frame,
-            text="📥 Download",
+            download_container,
+            text="📥 DOWNLOAD VIDEO",
             command=self.start_download,
-            font=ctk.CTkFont(size=14, weight="bold"),
-            height=40,
-            state="normal"
+            font=ctk.CTkFont(size=16, weight="bold"),
+            height=50,
+            state="normal",
+            fg_color=("#1f538d", "#14375e"),
+            hover_color=("#14375e", "#1f538d")
         )
-        self.download_btn.pack(pady=20)
+        self.download_btn.pack(pady=15, padx=20, fill="x")
         
     def setup_progress_section(self):
-        """Setup progress tracking"""
+        """Setup progress tracking with better visualization"""
         progress_frame = ctk.CTkFrame(self.main_frame)
         progress_frame.pack(fill="x", pady=(0, 20))
         
-        progress_label = ctk.CTkLabel(progress_frame, text="Download Progress:", font=ctk.CTkFont(size=14, weight="bold"))
+        progress_label = ctk.CTkLabel(progress_frame, text="📊 Download Progress:", font=ctk.CTkFont(size=14, weight="bold"))
         progress_label.pack(anchor="w", padx=20, pady=(20, 10))
         
-        self.progress_bar = ctk.CTkProgressBar(progress_frame)
-        self.progress_bar.pack(fill="x", padx=20, pady=(0, 10))
+        # Progress bar with percentage
+        progress_container = ctk.CTkFrame(progress_frame)
+        progress_container.pack(fill="x", padx=20, pady=(0, 10))
+        
+        self.progress_bar = ctk.CTkProgressBar(progress_container, height=20)
+        self.progress_bar.pack(fill="x", padx=10, pady=10)
         self.progress_bar.set(0)
         
-        self.status_label = ctk.CTkLabel(progress_frame, text="Ready to download")
-        self.status_label.pack(padx=20, pady=(0, 20))
+        # Progress percentage label
+        self.progress_percentage = ctk.CTkLabel(progress_container, text="0%", font=ctk.CTkFont(size=12, weight="bold"))
+        self.progress_percentage.pack(pady=5)
+        
+        # Status with icons
+        self.status_label = ctk.CTkLabel(progress_frame, text="⏳ Ready to download", font=ctk.CTkFont(size=12))
+        self.status_label.pack(padx=20, pady=5)
+        
+        # Download speed
+        self.speed_label = ctk.CTkLabel(progress_frame, text="Speed: --", font=ctk.CTkFont(size=11))
+        self.speed_label.pack(padx=20, pady=5)
+        
+        # File info
+        self.file_info_label = ctk.CTkLabel(progress_frame, text="File: Not selected", font=ctk.CTkFont(size=11))
+        self.file_info_label.pack(padx=20, pady=(5, 20))
         
     def setup_folder_section(self):
-        """Setup output folder selection"""
+        """Setup output folder selection with better visibility"""
         folder_frame = ctk.CTkFrame(self.main_frame)
-        folder_frame.pack(fill="x")
+        folder_frame.pack(fill="x", pady=(0, 20))
         
-        folder_label = ctk.CTkLabel(folder_frame, text="Output Folder:", font=ctk.CTkFont(size=14, weight="bold"))
+        folder_label = ctk.CTkLabel(folder_frame, text="📁 Download Destination:", font=ctk.CTkFont(size=14, weight="bold"))
         folder_label.pack(anchor="w", padx=20, pady=(20, 10))
         
-        folder_input_frame = ctk.CTkFrame(folder_frame)
-        folder_input_frame.pack(fill="x", padx=20, pady=(0, 20))
+        # Current folder display
+        current_folder_frame = ctk.CTkFrame(folder_frame)
+        current_folder_frame.pack(fill="x", padx=20, pady=(0, 10))
         
-        self.folder_entry = ctk.CTkEntry(
-            folder_input_frame,
-            placeholder_text="Output folder path...",
+        ctk.CTkLabel(current_folder_frame, text="Current folder:", font=ctk.CTkFont(size=12)).pack(anchor="w", padx=10, pady=(10, 5))
+        
+        self.current_folder_label = ctk.CTkLabel(
+            current_folder_frame, 
+            text=self.downloader.output_path, 
+            font=ctk.CTkFont(size=11),
+            text_color=("#1f538d", "#14375e")
         )
-        self.folder_entry.pack(side="left", fill="x", expand=True, padx=(10, 5), pady=10)
-        self.folder_entry.insert(0, self.downloader.output_path)
+        self.current_folder_label.pack(anchor="w", padx=10, pady=(0, 10))
+        
+        # Folder selection buttons
+        folder_buttons_frame = ctk.CTkFrame(folder_frame)
+        folder_buttons_frame.pack(fill="x", padx=20, pady=(0, 10))
         
         browse_btn = ctk.CTkButton(
-            folder_input_frame,
-            text="Browse",
+            folder_buttons_frame,
+            text="📁 Choose Download Folder",
             command=self.browse_folder,
-            width=100
+            font=ctk.CTkFont(size=14, weight="bold"),
+            height=40,
+            fg_color=("#2d8659", "#1e5a3a"),
+            hover_color=("#1e5a3a", "#2d8659")
         )
-        browse_btn.pack(side="right", padx=(5, 10), pady=10)
+        browse_btn.pack(fill="x", padx=10, pady=10)
+        
+        # Open folder button
+        self.open_folder_btn = ctk.CTkButton(
+            folder_buttons_frame,
+            text="📂 Open Downloads Folder",
+            command=self.open_downloads_folder,
+            font=ctk.CTkFont(size=12),
+            height=35,
+            fg_color=("gray60", "gray40"),
+            hover_color=("gray50", "gray30")
+        )
+        self.open_folder_btn.pack(fill="x", padx=10, pady=(0, 20))
         
     def browse_folder(self):
         """Browse for output folder"""
-        folder = fd.askdirectory(initialdir=self.downloader.output_path)
+        folder = fd.askdirectory(initialdir=self.downloader.output_path, title="Choose Download Folder")
         if folder:
-            self.folder_entry.delete(0, ctk.END)
-            self.folder_entry.insert(0, folder)
             self.downloader.output_path = folder
+            self.current_folder_label.configure(text=folder)
+            self.show_status(f"✅ Download folder set to: {folder}", "success")
+    
+    def open_downloads_folder(self):
+        """Open downloads folder in file explorer"""
+        import os
+        import subprocess
+        import platform
+        
+        try:
+            if platform.system() == "Windows":
+                os.startfile(self.downloader.output_path)
+            elif platform.system() == "Darwin":  # macOS
+                subprocess.run(["open", self.downloader.output_path])
+            else:  # Linux
+                subprocess.run(["xdg-open", self.downloader.output_path])
+            self.show_status("📂 Opened downloads folder", "success")
+        except Exception as e:
+            self.show_status(f"❌ Could not open folder: {str(e)}", "error")
             
     def analyze_video(self):
         """Analyze video URL in separate thread"""
@@ -251,11 +313,12 @@ class ModernYTDownloader:
             self.show_status("Please enter a URL", "error")
             return
             
-        # Update folder path
-        self.downloader.output_path = self.folder_entry.get()
-        
-        self.download_btn.configure(state="disabled", text="Downloading...")
+        self.download_btn.configure(state="disabled", text="DOWNLOADING...")
         self.progress_bar.set(0)
+        self.progress_percentage.configure(text="0%")
+        self.status_label.configure(text="🚀 Starting download...")
+        self.speed_label.configure(text="Speed: --")
+        self.file_info_label.configure(text="File: Preparing...")
         
         # Start download thread
         thread = threading.Thread(target=self._download_thread, args=(url, quality))
@@ -281,28 +344,41 @@ class ModernYTDownloader:
         self.root.after(0, self._update_progress, progress_info)
         
     def _update_progress(self, progress_info):
-        """Update progress display"""
+        """Update progress display with enhanced visualization"""
         status = progress_info.get('status', '')
         
         if status == 'downloading':
-            percentage = progress_info.get('percentage', '0%').replace('%', '')
+            percentage_str = progress_info.get('percentage', '0%')
+            percentage = percentage_str.replace('%', '')
+            
             try:
-                self.progress_bar.set(float(percentage) / 100)
+                progress_val = float(percentage) / 100
+                self.progress_bar.set(progress_val)
+                self.progress_percentage.configure(text=percentage_str)
             except ValueError:
                 pass
             
             speed = progress_info.get('speed', '')
             filename = progress_info.get('filename', '')
-            self.status_label.configure(text=f"Downloading: {filename} - {speed}")
+            
+            # Update all progress elements
+            self.status_label.configure(text=f"⬇️ Downloading: {filename}")
+            self.speed_label.configure(text=f"Speed: {speed}")
+            self.file_info_label.configure(text=f"File: {filename}")
             
         elif status == 'finished':
             self.progress_bar.set(1.0)
+            self.progress_percentage.configure(text="100%")
             filename = progress_info.get('filename', '')
-            self.status_label.configure(text=f"Completed: {filename}")
+            
+            # Update status to completed
+            self.status_label.configure(text=f"✅ Completed: {filename}")
+            self.speed_label.configure(text="Speed: Download finished")
+            self.file_info_label.configure(text=f"📁 Saved to: {self.downloader.output_path}")
             
     def _download_finished(self, result):
         """Handle download completion"""
-        self.download_btn.configure(state="normal", text="📥 Download")
+        self.download_btn.configure(state="normal", text="📥 DOWNLOAD VIDEO")
         
         if result.get('success'):
             self.show_status("Download completed successfully!", "success")
@@ -313,15 +389,20 @@ class ModernYTDownloader:
             
     def _download_error(self, error):
         """Handle download error"""
-        self.download_btn.configure(state="normal", text="📥 Download")
+        self.download_btn.configure(state="normal", text="📥 DOWNLOAD VIDEO")
         self.show_status(f"Download error: {error}", "error")
         self.progress_bar.set(0)
         
     def show_status(self, message, status_type="info"):
-        """Show status message"""
-        self.status_label.configure(text=message)
-        
-        # You could add different colors based on status_type if needed
+        """Show status message with visual feedback"""
+        # Update main status label
+        if hasattr(self, 'status_label'):
+            if status_type == "error":
+                self.status_label.configure(text=f"❌ {message}")
+            elif status_type == "success":
+                self.status_label.configure(text=f"✅ {message}")
+            else:
+                self.status_label.configure(text=f"ℹ️ {message}")
         
     def _format_duration(self, seconds):
         """Format duration in seconds to readable format"""
