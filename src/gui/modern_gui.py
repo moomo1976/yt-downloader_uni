@@ -131,7 +131,7 @@ class ModernYTDownloader:
             command=self.start_download,
             font=ctk.CTkFont(size=14, weight="bold"),
             height=40,
-            state="disabled"
+            state="normal"
         )
         self.download_btn.pack(pady=20)
         
@@ -192,7 +192,6 @@ class ModernYTDownloader:
             return
             
         self.analyze_btn.configure(state="disabled", text="Analyzing...")
-        self.download_btn.configure(state="disabled")
         
         # Run analysis in thread to prevent GUI freezing
         thread = threading.Thread(target=self._analyze_video_thread, args=(url,))
@@ -236,9 +235,6 @@ class ModernYTDownloader:
         
         self.info_text.delete("0.0", ctk.END)
         self.info_text.insert("0.0", info_text)
-        
-        # Enable download button
-        self.download_btn.configure(state="normal")
         
     def _show_analysis_error(self, error):
         """Show analysis error"""
