@@ -1,0 +1,56 @@
+🎥 YouTube Downloader Pro v2.1.0
+=======================================
+Datum vydání: 6. září 2025
+
+🆕 NOVÉ FUNKCE:
+✅ Automatická kontrola závislostí při spuštění
+✅ Inteligentní systém ověření FFmpeg a Python balíčků
+✅ Varovná okna s instrukcemi pro chybějící komponenty
+✅ Nové menu "Nástroje" s možností ruční kontroly závislostí
+✅ Standalone skript check_dependencies.py pro diagnostiku
+✅ Lepší zpracování Unicode znaků na Windows systémech
+
+🔧 VYLEPŠENÍ:
+✅ Robustnější progress tracking při stahování
+✅ Verzování aplikace v názvu a GUI
+✅ Důkladnější error handling při chybějících závislostech
+✅ Optimalizace pro různé encoding systémy
+
+📚 DOKUMENTACE:
+✅ Nový dokument DEPENDENCY_CHECK.md s detailním návodem
+✅ Aktualizované release notes a changelog
+
+🚀 INSTALACE A SPUŠTĚNÍ:
+• Stáhněte YouTube_Downloader_Pro_v2.1.0.exe
+• Při prvním spuštění aplikace zkontroluje závislosti
+• V případě chyb následujte instrukce v dialogovém okně
+• Pro ruční kontrolu: Menu "Nástroje" → "Kontrola závislostí"
+
+⚠️  ZÁVISLOSTI:
+SYSTÉMOVÉ:
+- FFmpeg (vyžadováno pro M3U8 streamy)
+  Download: https://ffmpeg.org/download.html
+
+PYTHON BALÍČKY (automaticky kontrolovány):
+- yt-dlp (stahování videí)
+- customtkinter (GUI)
+- Pillow (obrázky)
+- requests (HTTP)
+
+🔧 ŘEŠENÍ PROBLÉMŮ:
+1. Spusťte check_dependencies.py pro diagnostiku
+2. Nainstalujte chybějící komponenty dle instrukcí
+3. Restartujte aplikaci
+
+📈 TECHNICKÉ PODROBNOSTI:
+- PyInstaller build s optimalizacemi
+- Kompatibilní s Windows 10/11
+- Velikost: ~39 MB (single file executable)
+- Není nutná instalace Python prostředí
+
+🎯 CO DÁLE:
+- Plánujeme další vylepšení GUI
+- Více formátů pro export
+- Batch download funkcionalita
+
+Děkujeme za používání YouTube Downloader Pro! 🙏

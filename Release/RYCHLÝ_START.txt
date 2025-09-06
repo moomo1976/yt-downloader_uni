@@ -1,0 +1,58 @@
+🎥 YOUTUBE DOWNLOADER PRO v2.1.0 - RYCHLÝ START
+==================================================
+
+📋 CO POTŘEBUJETE:
+- YouTube_Downloader_Pro_v2.1.0.exe (tento soubor)
+- Internetové připojení
+- Windows 10/11
+
+⚡ ZAČNĚTE ZA 30 SEKUND:
+
+1️⃣ SPUSŤTE APLIKACI
+   → Dvojklik na YouTube_Downloader_Pro_v2.1.0.exe
+   → Aplikace zkontroluje závislosti automaticky
+   
+2️⃣ VLOŽTE URL
+   → Zkopírujte odkaz z YouTube
+   → Vložte do pole "Video URL"
+   
+3️⃣ VYBERTE FORMÁT
+   → MP4 = video (doporučeno)
+   → MP3 = pouze hudba
+   
+4️⃣ KLIKNĚTE STÁHNOUT
+   → Zelené tlačítko "⬇️ STÁHNOUT VIDEO"
+   
+5️⃣ SLEDUJTE PRŮBĚH
+   → Vidíte procenta: 0% → 100%
+   → Rychlost stahování v MiB/s
+
+🎯 HOTOVO!
+Video najdete ve složce Downloads/YT_Downloads
+
+💡 TIPY:
+- 720p kvalita = nejlepší poměr kvalita/velikost
+- MP4 formát = funguje všude
+- Zelené tlačítko "📂 Otevřít složku" = rychlé otevření
+
+❗ ŘEŠENÍ PROBLÉMŮ:
+- HTTP 403 / Blokováno? → Zkuste jiné video (90% řešení)
+- Chybí FFmpeg? → Zobrazí se dialog s instrukcemi
+- Nefunguje URL? → Zkuste www.youtube.com/watch?v=...
+- Pomalé? → Zkuste 480p místo 1080p
+- Chyba? → Menu → Nástroje → Kontrola závislostí
+
+⏰ LIMITY YOUTUBE:
+- Rate limit: 15-30 minut (příliš rychle stahování)
+- IP block: 1-2 hodiny (podezřelá aktivita)
+- TIP: Restart router = nová IP = rychlejší obnovení
+
+📞 RYCHLÁ POMOC:
+- Přečtěte si NÁVOD.md pro detaily
+- Zkontrolujte internetové připojení
+- Aplikace funguje BEZ instalace Pythonu
+- Menu → Nástroje → Kontrola závislostí pro diagnostiku
+
+🚀 UŽIJTE SI TO!
+
+Vytvořeno pomocí Claude Code | v2.1.0 | Září 2025

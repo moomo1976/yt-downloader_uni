@@ -9,7 +9,17 @@
       "Bash(pytest:*)",
       "Bash(pip install:*)",
       "Bash(python:*)",
-      "Bash(set PYTHONIOENCODING=utf-8)"
+      "Bash(set PYTHONIOENCODING=utf-8)",
+      "Bash(pyinstaller:*)",
+      "Bash(dir dist)",
+      "Bash(\"YouTube_Downloader_Pro.exe\")",
+      "Bash(./YouTube_Downloader_Pro.exe)",
+      "Bash(copy \"dist\\YouTube_Downloader_Pro.exe\" Release)",
+      "Bash(dir:*)",
+      "Bash(\"C:/dev/Python-prog/YT_Downloader/dist/YouTube_Downloader_Pro_v2.1.0.exe\")",
+      "Bash(timeout:*)",
+      "Bash(copy:*)",
+      "Bash(\"C:/dev/Python-prog/YT_Downloader/Release/YouTube_Downloader_Pro_v2.1.0.exe\")"
     ],
     "deny": [],
     "ask": []

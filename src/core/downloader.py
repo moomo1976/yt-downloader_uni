@@ -158,8 +158,6 @@ class VideoDownloader:
             format_selector = 'bestaudio/best'
         elif format_lower == 'webm':
             merge_format = 'webm'
-        elif format_lower == 'mkv':
-            merge_format = 'mkv'
         elif format_lower == 'avi':
             merge_format = 'avi'
         else:  # MP4 default
@@ -171,7 +169,26 @@ class VideoDownloader:
             'format': format_selector,
             'merge_output_format': merge_format,
             'outtmpl': output_template,
-            'progress_hooks': [self._progress_hook] if progress_callback else []
+            'progress_hooks': [self._progress_hook] if progress_callback else [],
+            # Anti-403 measures
+            'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'referer': 'https://www.youtube.com/',
+            'http_headers': {
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                'Accept-Language': 'en-us,en;q=0.5',
+                'Accept-Encoding': 'gzip, deflate',
+                'DNT': '1',
+                'Connection': 'keep-alive',
+                'Upgrade-Insecure-Requests': '1'
+            },
+            # Retry configuration
+            'retries': 3,
+            'fragment_retries': 3,
+            'ignoreerrors': False,
+            # Additional options
+            'no_warnings': False,
+            'extractaudio': format_lower == 'mp3',
+            'audioformat': 'mp3' if format_lower == 'mp3' else None
         }
         
         # Store callback for progress hook
@@ -185,7 +202,31 @@ class VideoDownloader:
             return {'success': True, 'filename': f'Downloaded successfully as {format_choice}'}
             
         except Exception as e:
-            return {'success': False, 'error': str(e)}
+            error_msg = str(e).lower()
+            
+            # Provide specific error messages for common issues
+            if '403' in error_msg or 'forbidden' in error_msg:
+                return {
+                    'success': False, 
+                    'error': 'HTTP 403: Video je blokováno. Zkuste: 1) Jiné video 2) Nižší kvalitu 3) MP3 formát 4) Restartovat aplikaci'
+                }
+            elif '404' in error_msg or 'not found' in error_msg:
+                return {
+                    'success': False,
+                    'error': 'Video nebylo nalezeno. Zkontrolujte URL nebo zkuste později.'
+                }
+            elif 'private' in error_msg or 'unavailable' in error_msg:
+                return {
+                    'success': False,
+                    'error': 'Video je privátní nebo nedostupné. Zkuste veřejné video.'
+                }
+            elif 'age' in error_msg or 'restricted' in error_msg:
+                return {
+                    'success': False,
+                    'error': 'Video má věkové omezení. Zkuste jiné video.'
+                }
+            else:
+                return {'success': False, 'error': f'Chyba stahování: {str(e)}'}
     
     def _progress_hook(self, d):
         """Progress hook for yt-dlp with extensive debugging"""

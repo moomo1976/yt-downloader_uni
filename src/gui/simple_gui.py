@@ -11,7 +11,10 @@ import sys
 
 # Add parent directory to path for imports
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from core.downloader import VideoDownloader
+from core.dependency_checker import DependencyChecker
+from version import APP_TITLE
 
 
 class SimpleYTDownloader:
@@ -22,14 +25,26 @@ class SimpleYTDownloader:
         
         # Initialize main window
         self.root = ctk.CTk()
-        self.root.title("🎥 YouTube Downloader Pro")
+        try:
+            self.root.title(f"🎥 {APP_TITLE}")
+        except UnicodeEncodeError:
+            self.root.title(APP_TITLE)
         self.root.geometry("800x700")
         self.root.minsize(600, 500)
+        
+        # Check dependencies before proceeding
+        self.dependency_checker = DependencyChecker()
+        dependency_results = self.dependency_checker.check_all_dependencies()
         
         # Initialize downloader
         self.downloader = VideoDownloader()
         
         self.setup_ui()
+        self.setup_menu()
+        
+        # Show dependency warning if needed
+        if not dependency_results['all_ok']:
+            self.show_dependency_warning(dependency_results)
         
     def setup_ui(self):
         """Setup simple and clear UI"""
@@ -38,9 +53,13 @@ class SimpleYTDownloader:
         self.main_frame.pack(fill="both", expand=True, padx=20, pady=20)
         
         # Title
+        try:
+            title_text = f"🎥 {APP_TITLE}"
+        except:
+            title_text = APP_TITLE
         title = ctk.CTkLabel(
             self.main_frame,
-            text="🎥 YouTube Downloader Pro",
+            text=title_text,
             font=ctk.CTkFont(size=28, weight="bold")
         )
         title.pack(pady=(0, 30))
@@ -172,7 +191,7 @@ class SimpleYTDownloader:
         self.format_menu = ctk.CTkOptionMenu(
             options_container,
             variable=self.format_var,
-            values=["MP4", "MP3", "WEBM", "MKV", "AVI"],
+            values=["MP4", "MP3", "WEBM", "AVI"],
             font=ctk.CTkFont(size=13),
             height=35
         )
@@ -234,6 +253,21 @@ class SimpleYTDownloader:
             text_color="gray"
         )
         self.info_label.pack(pady=(5, 20))
+    
+    def setup_menu(self):
+        """Setup application menu bar"""
+        import tkinter as tk
+        
+        # Create menu bar
+        menubar = tk.Menu(self.root)
+        self.root.configure(menu=menubar)
+        
+        # Tools menu
+        tools_menu = tk.Menu(menubar, tearoff=0)
+        menubar.add_cascade(label="Nástroje", menu=tools_menu)
+        tools_menu.add_command(label="🔍 Kontrola závislostí", command=self.check_dependencies_menu)
+        tools_menu.add_separator()
+        tools_menu.add_command(label="📂 Otevřít složku stažených", command=self.open_folder)
         
     def browse_folder(self):
         """Browse for download folder"""
@@ -378,6 +412,58 @@ class SimpleYTDownloader:
         self.progress_label.configure(text="0%")
         self.status_label.configure(text=f"❌ Error: {error}")
         self.info_label.configure(text="Please check the URL and try again")
+    
+    def show_dependency_warning(self, dependency_results):
+        """Show warning dialog for missing dependencies"""
+        import tkinter.messagebox as msgbox
+        
+        missing_deps = []
+        
+        # Collect missing system dependencies
+        for dep_name, info in dependency_results['system'].items():
+            if not info['available'] and info['required']:
+                missing_deps.append(f"• {info['description']}")
+        
+        # Collect missing Python dependencies
+        python_missing = []
+        for module_name, info in dependency_results['python'].items():
+            if not info['available'] and info['required']:
+                missing_deps.append(f"• {info['description']}")
+                python_missing.append(info['package'])
+        
+        if missing_deps:
+            warning_msg = "⚠️ CHYBĚJÍCÍ KOMPONENTY:\n\n"
+            warning_msg += "\n".join(missing_deps)
+            
+            if python_missing:
+                warning_msg += f"\n\n💡 Instalace Python balíčků:\n"
+                warning_msg += f"pip install {' '.join(python_missing)}"
+            
+            warning_msg += "\n\n⚠️ Bez těchto komponent nemusí aplikace fungovat správně!"
+            
+            # Show warning dialog
+            result = msgbox.showwarning(
+                "Chybějící komponenty",
+                warning_msg
+            )
+    
+    def check_dependencies_menu(self):
+        """Check dependencies and show detailed report"""
+        import tkinter.messagebox as msgbox
+        
+        results = self.dependency_checker.check_all_dependencies()
+        
+        if results['all_ok']:
+            msgbox.showinfo(
+                "Kontrola závislostí",
+                "✅ Všechny požadované komponenty jsou dostupné!\n\nAplikace je připravena k použití."
+            )
+        else:
+            report = self.dependency_checker.get_missing_dependencies_report()
+            msgbox.showerror(
+                "Chybějící komponenty",
+                report
+            )
         
     def run(self):
         """Start the application"""
